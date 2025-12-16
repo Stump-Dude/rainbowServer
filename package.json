@@ -1,9 +1,11 @@
 {
   "name": "rainbowserver",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "test.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "Test",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +18,8 @@
     "url": "https://github.com/Stump-Dude/rainbowServer/issues"
   },
   "homepage": "https://github.com/Stump-Dude/rainbowServer#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }

@@ -4,7 +4,9 @@ import connection from './db.js';
 
 const app = express();
 
-const port = 3307;
+
+// IF YOU WANT TO HAVE LOCAL HOST - UNCOMMENT THIS
+// const port = 3307;
 
 
 app.use(express.json());
@@ -62,11 +64,14 @@ app.get('/', (req, res) => {
 // });
 
 // ONLINE------------------------
+let port = 10000; // to open it for Unity
 if (process.env.PORT) {
-  let port = 10000;
   port = parseInt(process.env.PORT, 10);
-  console.log("🦄 Server is running:D")
 }
+
+app.listen(port, "0.0.0.0", () => {
+  console.log("🦄 Server listening on port " + port);
+});
 
 
 

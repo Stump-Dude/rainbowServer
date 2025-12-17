@@ -20,7 +20,6 @@ export default connection;
 // LOCAL DOWN
 
 // import mysql from "mysql2";
-// // const mysql = require("mysql2");
 
 // const connection = mysql.createConnection({
 //     host: "bnhzin.h.filess.io",

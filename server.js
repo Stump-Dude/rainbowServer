@@ -3,7 +3,9 @@ import express from 'express';
 import connection from './db.js';
 
 const app = express();
+
 const port = 3307;
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -12,7 +14,6 @@ const enableCORS = true;
 const enableWasmMultithreading = true;
 
 // Serve the current working directory 
-// Note: this makes the current working directory visible to all computers over the network.
 // const unityBuildPath = __dirname;
 const unityBuildPath = process.cwd();
 
@@ -49,93 +50,23 @@ app.get("/db-check", (req, res) => {
 //     }
 // }))
 
-// useless crap starts -----------------------------------------------
-// stuff from Unity page...
-app.use((req, res, next) => {
-    var path = req.url;
-
-    // Provide COOP, COEP and CORP headers for SharedArrayBuffer
-    if (enableWasmMultithreading &&
-        (
-            path == '/' ||
-            path.includes('.js') ||
-            path.includes('.html') ||
-            path.includes('.htm')
-        )
-    ) {
-        res.set('Cross-Origin-Opener-Policy', 'same-origin');
-        res.set('Cross-Origin-Embedder-Policy', 'require-corp');
-        res.set('Cross-Origin-Resource-Policy', 'cross-origin');
-    }
-
-    // Set CORS headers
-    if (enableCORS) {
-        res.set('Access-Control-Allow-Origin', '*');
-    }    
-
-    // Set content encoding depending on compression
-    if (path.endsWith('.br')) {
-        res.set('Content-Encoding', 'br');
-    } else if (path.endsWith('.gz')) {
-        res.set('Content-Encoding', 'gzip');
-    }
-    // Explicitly set content type. Files can have wrong content type if build uses compression.
-    if (path.includes('.wasm')) {
-        res.set('Content-Type', 'application/wasm');
-    } else if (path.includes('.js')) {
-        res.set('Content-Type', 'application/javascript');
-    } else if (path.includes('.json')) {
-        res.set('Content-Type', 'application/json');
-    } else if (
-    path.includes('.data') ||
-    path.includes('.bundle') ||
-    path.endsWith('.unityweb')
-    ) {
-        res.set('Content-Type', 'application/octet-stream');
-    }
-    // Ignore cache-control: no-cache 
-    // when if-modified-since or if-none-match is set
-    // because Unity Loader will cache and revalidate manually
-    if (req.headers['cache-control'] == 'no-cache' &&
-    (
-        req.headers['if-modified-since'] ||
-        req.headers['if-none-match']
-    )
-    ) {       
-        delete req.headers['cache-control'];
-    }        
-    next();
-});
-
-// useless crap ends -----------------------------------------------
-
 app.use('/', express.static(unityBuildPath, { immutable: true }));
 
 app.get('/', (req, res) => {
   res.send('Welcome to the server!');
 })
 
-
-// port -> 3000 if local test...
-// if you want to make it with Web Service, try 3307 (check db.js & package.json) 
-
-app.listen(port, () => {
-  console.log('🦄 Server is running on port -> ' + port);
-})
-// app.listen(3000, "0.0.0.0", () => {
-//   console.log("🦄 Server running")
+// LOCAL-------------------------
+// app.listen(port, "0.0.0.0", () => {
+//   console.log('🦄 Server running on port -> ' + port)
 // });
 
-// Unity stuff ---------------------
-// server.addListener('error', (error) => {
-//     console.error(error);
-// });
+// ONLINE------------------------
+if (process.env.PORT) {
+  port = parseInt(process.env.PORT, 10);
+  console.log("🦄 Server is running:D")
+}
 
-// server.addListener('close', () => {
-//     console.log('Server stopped.');
-//     process.exit();
-// });
-// Unity stuff ---------------------
 
 
 // --- REGISTER ---

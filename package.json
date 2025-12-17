@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "main": "test.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "Test",
     "start": "node server.js"
   },
   "repository": {
@@ -20,6 +18,8 @@
   "homepage": "https://github.com/Stump-Dude/rainbowServer#readme",
   "description": "",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mysql2": "^3.12.0"
   }
 }
+  

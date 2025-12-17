@@ -63,7 +63,7 @@ app.get('/', (req, res) => {
 
 // ONLINE------------------------
 if (process.env.PORT) {
-  let port = 1000;
+  let port = 10000;
   port = parseInt(process.env.PORT, 10);
   console.log("🦄 Server is running:D")
 }

@@ -3,7 +3,7 @@ import express from 'express';
 import connection from './db.js';
 
 const app = express();
-const port = 3000;
+const port = 3307;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -119,12 +119,12 @@ app.get('/', (req, res) => {
 // port -> 3000 if local test...
 // if you want to make it with Web Service, try 3307 (check db.js & package.json) 
 
-// app.listen(port, () => {
-//   console.log('🦄 Server is running at on port' + port);
-// })
-app.listen(3000, "0.0.0.0", () => {
-  console.log("🦄 Server running")
-});
+app.listen(port, () => {
+  console.log('🦄 Server is running on port -> ' + port);
+})
+// app.listen(3000, "0.0.0.0", () => {
+//   console.log("🦄 Server running")
+// });
 
 // Unity stuff ---------------------
 // server.addListener('error', (error) => {
@@ -192,6 +192,8 @@ app.post("/register", (req, res) => {
 // --- LOGIN ---
 // POST /login { "name": "user", "password": "123" }
 app.post("/login", (req, res) => {
+  console.log("LOGIN BODY:", req.body);
+  
   const name = req.body.name;
   const password = req.body.password;
 

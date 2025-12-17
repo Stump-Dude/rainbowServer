@@ -74,7 +74,6 @@ app.listen(port, "0.0.0.0", () => {
 });
 
 
-
 // --- REGISTER ---
 app.post("/register", (req, res) => {
   console.log("REGISTER BODY:", req.body);
@@ -125,7 +124,6 @@ app.post("/register", (req, res) => {
     }
   );
 });
-
 // --- LOGIN ---
 // POST /login { "name": "user", "password": "123" }
 app.post("/login", (req, res) => {
@@ -167,3 +165,87 @@ app.post("/login", (req, res) => {
   );
 });
 
+app.get("/progress/:userId", (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+
+  if (!userId) {
+    res.status(400).json({ ok: false, message: "Invalid userId" });
+    return;
+  }
+
+  connection.query(
+    "SELECT sheet2_unlocked, sheet2_completed, updated_at FROM user_progress WHERE user_id = ? LIMIT 1",
+    [userId],
+    (err, rows) => {
+      if (err) {
+        res.status(500).json({ ok: false, message: err.message });
+        return;
+      }
+
+      if (!rows || rows.length === 0) {
+        res.status(404).json({ ok: false, message: "Progress not found" });
+        return;
+      }
+
+      res.json({ ok: true, userId: userId, progress: rows[0] });
+    }
+  );
+});
+
+// POST /collectable/picked
+// Body: { "userId": 123 }
+app.post("/collectable/picked", (req, res) => {
+  const userId = req.body.userId;
+
+  if (!userId) {
+    res.status(400).json({ ok: false, message: "Missing userId" });
+    return;
+  }
+
+  connection.query(
+    "UPDATE user_progress SET sheet2_unlocked = 1 WHERE user_id = ?",
+    [userId],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ ok: false, message: err.message });
+        return;
+      }
+
+      if (result.affectedRows === 0) {
+        res.status(404).json({ ok: false, message: "User progress not found" });
+        return;
+      }
+
+      res.json({ ok: true, userId: userId, sheet2_unlocked: 1 });
+    }
+  );
+});
+
+// POST /sheet2/completed
+// Body: { "userId": 123 }
+app.post("/sheet2/completed", (req, res) => {
+  const userId = req.body.userId;
+
+  if (!userId) {
+    res.status(400).json({ ok: false, message: "Missing userId" });
+    return;
+  }
+
+  connection.query(
+    "UPDATE user_progress SET sheet2_completed = 1 WHERE user_id = ?",
+    [userId],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ ok: false, message: err.message });
+        return;
+      }
+
+      if (result.affectedRows === 0) {
+        res.status(404).json({ ok: false, message: "User progress not found" });
+        return;
+      }
+
+      res.json({ ok: true, userId: userId, sheet2_completed: 1 });
+    }
+  );
+});

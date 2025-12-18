@@ -1,0 +1,36 @@
+Rainbow Server – Setup Guide
+This server is for Rainbow Strings (Unity) and Rainbow Tiles (Android) games. 
+It handles: 
+user registration, 
+login, 
+progress tracking, 
+and collectables using Node.js + Express + MySQL (but… not using progress tracking, and collectables).
+
+Inside the folder “rainbow-backend” you will find two files:
+schemaCreate - serves to create each table;
+schemaPopulate - serves to populate database with user id/name/password ready;
+
+Create a query in your database in client.files.io (by clicking “Web Client”) for each of the files and run it.
+
+When setting up the server write onto the terminal cmd ‘npm install’, that will download all packages necessary.
+If everything is correct, player will be able to join to the game by this link:
+https://rainbowserver-1.onrender.com
+
+
+Start the Server Locally
+Run:
+npm start
+
+You should see something like:
+🦄 Server listening on port 10000
+
+Test the Server (Local)
+Health check
+
+Open in browser:
+
+http://localhost:10000/health
+
+Expected response:
+
+{ "ok": true, "service": "rainbowServer" }
